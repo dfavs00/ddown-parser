@@ -68,6 +68,7 @@ class DdownParser(BaseParser):
         return {
             'global_style': self._extract_global_style(content),
             'elements': self._parse_elements(content),
+            'dom_mode': self._check_dom_mode(content),
         }
     
     def _extract_global_style(self, content: str) -> Optional[str]:
@@ -84,6 +85,17 @@ class DdownParser(BaseParser):
             return match.group(1).strip()
         return None
     
+    def _check_dom_mode(self, content: str) -> bool:
+        """Check if dom-mode is enabled in the content.
+        
+        Args:
+            content: Raw Ddown content
+            
+        Returns:
+            True if dom-mode is enabled, False otherwise
+        """
+        return bool(self.style_patterns['dom_mode'].search(content))
+    
     def _parse_elements(self, content: str) -> List[Dict[str, Any]]:
         """Parse all elements from the Ddown content.
         
@@ -99,14 +111,17 @@ class DdownParser(BaseParser):
         # Remove global style section if present to avoid parsing it as content
         content = self.style_patterns['global'].sub('', content)
         
+        # Remove dom-mode directive if present
+        content = self.style_patterns['dom_mode'].sub('', content)
+        
         # Split content into lines for line-by-line processing
         lines = content.split('\n')
         processed_lines = [False] * len(lines)
         
-        # Parse all elements with their positions in the document
+        # Parse elements with their positions
         elements_with_position = []
         
-        # Parse each type of element
+        # Parse different element types
         self.element_parser.parse_headings(content, lines, processed_lines, elements_with_position)
         self.element_parser.parse_code_blocks(content, lines, processed_lines, elements_with_position)
         self.element_parser.parse_blockquotes(lines, processed_lines, elements_with_position)
@@ -115,10 +130,34 @@ class DdownParser(BaseParser):
         self.element_parser.parse_ordered_lists(lines, processed_lines, elements_with_position)
         self.element_parser.parse_paragraphs(lines, processed_lines, elements_with_position)
         
-        # Sort elements by their original position in the document
+        # Sort elements by position
         elements_with_position.sort(key=lambda x: x['position'])
         
-        # Extract just the elements
-        elements = [item['element'] for item in elements_with_position]
+        # Return elements without position information
+        return [element['element'] for element in elements_with_position]
+    
+    def _convert_to_html(self, document: Dict[str, Any]) -> str:
+        """Convert a parsed document to HTML.
         
-        return elements
+        Args:
+            document: Parsed document structure
+            
+        Returns:
+            HTML string
+        """
+        from ..converters.html_converter import HtmlConverter
+        converter = HtmlConverter()
+        return converter.convert(document)
+    
+    def _convert_to_pdf(self, document: Dict[str, Any]) -> bytes:
+        """Convert a parsed document to PDF.
+        
+        Args:
+            document: Parsed document structure
+            
+        Returns:
+            PDF bytes
+        """
+        from ..converters.pdf_converter import PdfConverter
+        converter = PdfConverter()
+        return converter.convert(document)

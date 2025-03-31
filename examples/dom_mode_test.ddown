@@ -1,0 +1,55 @@
+{@dom-mode}
+
+Dom Mode Demo
+============
+
+This document demonstrates the special Dom Mode theme with a dark background, purple headings, and yellow accents.
+
+Features
+--------
+
+=> The dom-mode directive enables a special dark theme
+=> Headings are styled in purple
+=> Links and code are highlighted in yellow
+=> Lists use the signature "=>" marker in yellow
+
+Code Example
+~~~~~~~~~~~~
+
+```python
+def hello_world():
+    print("Hello from Dom Mode!")
+    return True
+```
+
+Blockquote Example
+~~~~~~~~~~~~~~~~
+
+> This is a blockquote in Dom Mode. It has a special background and a purple border on the left side.
+
+Table Example
+~~~~~~~~~~~~
+
+| Feature | Description |
+|---------|-------------|
+| Dark Background | Easy on the eyes |
+| Purple Headings | Dom's favorite color |
+| Yellow Accents | For important elements |
+| Signature | Shows it was made with Ddown |
+
+Links and Images
+~~~~~~~~~~~~~~
+
+Here's a [link to the README](README.ddown) file.
+
+![Ddown Logo](https://via.placeholder.com/150x50/bb86fc/ffffff?text=Ddown)
+
+Inline Styles
+~~~~~~~~~~~
+
+You can still use inline styles {@ color: #ff5722; } to override the theme for specific elements.
+
+Classes and IDs
+~~~~~~~~~~~~~~
+
+Elements can have classes and IDs {.special #unique} for additional styling.

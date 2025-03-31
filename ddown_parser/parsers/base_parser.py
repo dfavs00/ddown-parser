@@ -26,6 +26,7 @@ class BaseParser:
             'global': re.compile(r'\{@global-style\}([\s\S]*?)\{@endglobal-style\}'),
             'inline': re.compile(r'\{@\s*([^}]+)\s*\}'),
             'class_id': re.compile(r'\{([#.][^}]+)\}'),
+            'dom_mode': re.compile(r'\{@dom-mode\}'),  # New pattern for dom-mode
         }
         self.code_block_pattern: Pattern = re.compile(r'```([^\n]*)\n([\s\S]*?)```', re.MULTILINE)
         self.blockquote_pattern: Pattern = re.compile(r'^>\s*(.+)$', re.MULTILINE)

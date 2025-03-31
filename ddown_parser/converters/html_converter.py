@@ -23,6 +23,131 @@ class HtmlConverter(BaseConverter):
     def __init__(self) -> None:
         """Initialize a new HTML converter."""
         super().__init__()
+        
+        # Dom Mode theme CSS - dark mode with purple and yellow accents
+        self.dom_mode_css = """
+        body {
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #bb86fc; /* Purple accent */
+            font-weight: 600;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        h1 {
+            font-size: 2.2em;
+            border-bottom: 2px solid #bb86fc;
+            padding-bottom: 0.3em;
+        }
+        
+        h2 {
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+        }
+        
+        a {
+            color: #ffb300; /* Yellow accent */
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+            color: #ffd54f;
+        }
+        
+        p {
+            margin: 1em 0;
+        }
+        
+        ul, ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+        
+        li {
+            margin: 0.5em 0;
+        }
+        
+        ul li::marker {
+            color: #ffb300; /* Yellow accent */
+            content: "=> ";
+        }
+        
+        blockquote {
+            border-left: 4px solid #bb86fc; /* Purple accent */
+            margin: 1em 0;
+            padding: 0.5em 1em;
+            background-color: #2d2d42;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #2d2d42;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            color: #ffb300; /* Yellow accent */
+        }
+        
+        pre {
+            background-color: #2d2d42;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+            border: 2px solid #bb86fc; /* Purple accent */
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+        }
+        
+        th {
+            background-color: #bb86fc; /* Purple accent */
+            color: #1a1a2e;
+            font-weight: bold;
+            text-align: left;
+            padding: 0.5em;
+        }
+        
+        td {
+            border: 1px solid #2d2d42;
+            padding: 0.5em;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #2d2d42;
+        }
+        
+        /* Dom's signature style */
+        .dom-signature {
+            text-align: right;
+            font-style: italic;
+            color: #bb86fc;
+            margin-top: 2em;
+        }
+        """
     
     def convert(self, document: Dict[str, Any]) -> str:
         """Convert a parsed Ddown document to HTML.
@@ -43,11 +168,18 @@ class HtmlConverter(BaseConverter):
         html_parts.append('<meta name="viewport" content="width=device-width, initial-scale=1.0">')
         html_parts.append('<title>Ddown Document</title>')
         
+        # Add styles
+        html_parts.append('<style>')
+        
+        # Add dom-mode CSS if enabled
+        if document.get('dom_mode', False):
+            html_parts.append(self.dom_mode_css)
+        
         # Add global styles if present
         if document.get('global_style'):
-            html_parts.append('<style>')
             html_parts.append(document['global_style'])
-            html_parts.append('</style>')
+            
+        html_parts.append('</style>')
         
         html_parts.append('</head>')
         html_parts.append('<body>')
@@ -55,6 +187,10 @@ class HtmlConverter(BaseConverter):
         # Convert each element to HTML
         for element in document.get('elements', []):
             html_parts.append(self._convert_element_to_html(element))
+        
+        # Add Dom's signature if dom-mode is enabled
+        if document.get('dom_mode', False):
+            html_parts.append('<div class="dom-signature">Created with Ddown - Dom\'s Markdown</div>')
         
         # Add closing tags
         html_parts.append('</body>')
