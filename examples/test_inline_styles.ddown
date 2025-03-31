@@ -2,6 +2,7 @@
 h1 { color: #2E86C1; font-family: Arial; }
 h2 { color: #3498DB; }
 li { margin-bottom: 8px; }
+table { border: 1px solid #3498DB; }
 .special-list { color: #E74C3C; }
 {@endglobal-style}
 
