@@ -1,0 +1,56 @@
+Example Ddown Document
+=====================
+
+{@global-style}
+h1 { color: #2E86C1; font-family: Arial; }
+h2 { color: #3498DB; }
+li { margin-bottom: 8px; }
+.special-list { color: #E74C3C; }
+{@endglobal-style}
+
+Introduction
+------------
+
+This is a simple example of a Ddown document. It demonstrates the basic features of the Ddown syntax.
+
+Lists in Ddown
+~~~~~~~~~~~~~~ {@ color: #8E44AD; }
+
+=> Unordered list items use the "=>" prefix
+=> They can span multiple lines
+=> And can have inline styles {@ font-weight: bold; }
+
+1. Ordered lists use numbers
+2. Just like in regular markdown
+3. They're quite straightforward
+
+Code Example
+------------
+
+```python
+def hello_ddown():
+    print("Hello from Ddown!")
+    return True
+
+# This is a Python code block
+hello_ddown()
+```
+
+Styling and Links
+----------------
+
+=> You can add [links to websites](https://example.com)
+=> And include images: ![Ddown Logo](https://example.com/ddown.png)
+=> Blockquotes work too:
+
+> This is a blockquote in Ddown.
+> It can span multiple lines.
+
+Tables
+------
+
+| Feature       | Syntax           | Example         |
+|---------------|------------------|----------------|
+| Heading 1     | Title =====      | Like this doc  |
+| List Item     | => Item          | => Like this   |
+| Inline Style  | {@ color: #FFF; }| Colored text   |

@@ -1,0 +1,186 @@
+Ddown Syntax Guide
+==================
+
+Welcome to the Ddown Syntax Guide! This document explains how to use the .ddown file type, a markdown variant created by Dom. Below, you'll find the rules and features that make Ddown unique, including headings, lists, styling, and more.
+
+{@global-style}
+h1 { color: #2E86C1; font-family: Arial; }
+h2 { color: #3498DB; }
+li { margin-bottom: 8px; }
+.special-list { color: #E74C3C; }
+{@endglobal-style}
+
+Headings in Ddown
+-----------------
+
+Ddown uses underlines to define heading levels from h1 (biggest) to h5 (smallest). Here's how they work:
+
+=> h1: Use a line of "=" under the title (like this document's title)
+=> h2: Use a line of "-" (like this section)
+=> h3: Use a line of "~"
+=> h4: Use a line of "^"
+=> h5: Use a line of "*"
+
+Example Headings
+~~~~~~~~~~~~~~~~
+
+Sub-Sub Heading
+^^^^^^^^^^^^^^^
+
+Smallest Heading
+****************
+
+Regular text has no underline and follows standard paragraph rules.
+
+Lists in Ddown
+--------------
+
+Ddown supports both unordered and ordered lists with distinct syntax:
+
+Unordered Lists
+~~~~~~~~~~~~~~~
+
+=> Use "=> " at the start of a line for unordered list items
+=> Consecutive "=>" lines form a single list
+=> Great for ideas, todos, or notes (like this one!)
+
+Example:
+=> Project task one
+=> Project task two
+
+Ordered Lists
+~~~~~~~~~~~~~
+
+=> Use "1. ", "2. ", etc., for ordered lists
+=> Follows standard markdown numbering
+
+Example:
+1. First step
+2. Second step
+
+Styling Your Ddown Document
+---------------------------
+
+Ddown lets you add CSS styles globally or inline to customize your content.
+
+Global Styles
+~~~~~~~~~~~~~
+
+=> Define styles at the top with {@global-style} ... {@endglobal-style}
+=> Use standard CSS syntax to style headings, lists, etc.
+=> See the top of this file for an example applied to h1, h2, and li
+
+Inline Styles
+~~~~~~~~~~~~~
+
+=> Add styles to specific elements with {@ property: value; } after the element
+=> Example: This line {@ color: #27AE60; } is green
+
+Heading with Style
+~~~~~~~~~~~~~~~~~~ {@ font-size: 18px; color: #8E44AD; }
+
+=> The heading above has a custom size and color
+=> Styles apply only to the element they follow
+
+Classes and IDs
+~~~~~~~~~~~~~~~
+
+=> Add classes or IDs with {#id .class} after an element
+=> Style them in the global style section
+
+Example Heading {#example .highlight}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+=> This heading has an ID "example" and class "highlight"
+
+Special Lists with Context
+--------------------------
+
+In Ddown, "=>" under a heading is treated as a list. You can style these lists using global styles or inline attributes.
+
+Ideas List Example
+~~~~~~~~~~~~~~~~~~ {@class: special-list}
+
+=> This list has a red color from the .special-list class
+=> Applied via the heading's class attribute
+
+Other Markdown Elements
+-----------------------
+
+Ddown supports standard markdown features with its own flair:
+
+Code Blocks
+~~~~~~~~~~~
+
+=> Use triple backticks to start and end code blocks
+=> Add a language after the opening backticks for syntax highlighting
+
+```javascript
+function hello() {
+console.log("Hello, Ddown!");
+}
+```
+
+Quotes
+~~~~~~
+
+=> Use ">" for blockquotes
+
+> This is a quote in Ddown. Simple and clean.
+
+Images and Links
+~~~~~~~~~~~~~~~~
+
+=> Images: ![Alt text](url)
+=> Links: [Link text](url)
+
+Example:
+=> ![Ddown Logo](https://example.com/ddown.png)
+=> [Visit xAI](https://xai.ai)
+
+Tables
+~~~~~~
+
+=> Use pipes | and dashes - to create tables
+
+| Feature       | Syntax           |
+|---------------|------------------|
+| Heading 1     | Title =====      |
+| List Item     | => Item          |
+| Inline Style  | {@ color: #FFF; }|
+
+Intricacies and Tips
+--------------------
+
+Scope of Styles
+~~~~~~~~~~~~~~~
+
+=> Inline styles apply only to the element they follow
+=> Global styles apply document-wide but can be overridden by inline styles
+=> Use classes for reusable styles across multiple elements
+
+The "=>" Marker
+~~~~~~~~~~~~~~~
+
+=> "=>" is the default unordered list marker in Ddown
+=> It’s inspired by Dom’s note-taking style and gives Ddown a unique feel
+=> Use it freely under headings or standalone
+
+Rendering Ddown
+~~~~~~~~~~~~~~~
+
+=> To use Ddown, you’ll need a parser to convert .ddown files to HTML, PDF, etc.
+=> Styles should translate to CSS in the output
+=> Future tools might include a CLI or editor plugin—stay tuned!
+
+Personal Touch
+~~~~~~~~~~~~~~
+
+=> Since Ddown is by Dom, try {@dom-mode} for fun (not implemented yet, but imagine a signature style!)
+
+Conclusion
+----------
+
+Ddown combines markdown simplicity with custom styling and a personal twist. Use it for notes, documentation, or creative projects. Experiment with the syntax, and let it evolve with your needs!
+
+Happy Ddown-ing!

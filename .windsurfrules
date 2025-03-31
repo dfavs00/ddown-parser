@@ -1,0 +1,5 @@
+1. Use type hints for classes, functions, and variables.
+2. break down the code into smaller functions when things get too long.
+3. Use comments to explain why code does what it does.
+4. Break out related code into files.
+5. Use a consistent naming convention for variables, functions, and classes.
