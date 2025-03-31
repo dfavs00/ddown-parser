@@ -1,25 +1,38 @@
-# Ddown Parser
+{@global-style}
+body { font-family: Arial, sans-serif; }
+h1 { color: #2E86C1; }
+h2 { color: #3498DB; }
+code { background-color: #f5f5f5; padding: 2px 4px; border-radius: 4px; }
+pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; }
+.command { font-weight: bold; }
+{@endglobal-style}
+
+Ddown Parser
+===========
 
 A Python-based parser for converting Ddown files (.ddown) to various output formats including HTML, PDF, and more.
 
-## What is Ddown?
+What is Ddown?
+-------------
 
 Ddown is a custom markdown-like language with unique syntax features including:
 
-- Heading levels defined by different underline characters
-- Unordered lists using the "=> " prefix
-- Styling capabilities with global and inline CSS
-- Class and ID assignments for elements
-- Support for standard markdown elements like code blocks, quotes, images, and links
+=> Heading levels defined by different underline characters
+=> Unordered lists using the "=> " prefix
+=> Styling capabilities with global and inline CSS
+=> Class and ID assignments for elements
+=> Support for standard markdown elements like code blocks, quotes, images, and links
 
-## Features
+Features
+--------
 
-- Parse Ddown files to an intermediate representation
-- Convert Ddown to HTML with CSS styling
-- Generate PDF documents from Ddown
-- Support for all Ddown syntax elements
+=> Parse Ddown files to an intermediate representation
+=> Convert Ddown to HTML with CSS styling
+=> Generate PDF documents from Ddown
+=> Support for all Ddown syntax elements
 
-## Installation
+Installation
+-----------
 
 ```bash
 # Clone the repository
@@ -34,7 +47,8 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Usage
+Usage
+-----
 
 ```python
 from ddown_parser import DdownParser
@@ -53,7 +67,8 @@ with open('output.pdf', 'wb') as f:
     f.write(pdf_output)
 ```
 
-## Command Line Interface
+Command Line Interface
+---------------------
 
 ```bash
 # Convert to HTML
@@ -63,7 +78,8 @@ python -m ddown_parser example.ddown --format html --output output.html
 python -m ddown_parser example.ddown --format pdf --output output.pdf
 ```
 
-## Development
+Development
+-----------
 
 ```bash
 # Run tests

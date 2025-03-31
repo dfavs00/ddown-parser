@@ -42,6 +42,9 @@ class ElementParser(BaseParser):
                     end_line = start_line + 1  # Heading text line
                     underline_line = end_line + 1  # Underline line
                     
+                    # Extract inline styles and class/id from the heading text
+                    heading_text, inline_attributes = self.extract_inline_attributes(heading_text)
+                    
                     # Check if there's a style after the underline
                     style_attributes = {}
                     if underline_line + 1 < len(lines):
@@ -68,11 +71,8 @@ class ElementParser(BaseParser):
                     # Mark the heading lines as processed
                     processed_lines[start_line:underline_line+1] = [True] * (underline_line - start_line + 1)
                     
-                    # Extract inline styles and class/id from the heading text
-                    attributes = style_attributes.copy()
-                    heading_text, inline_attributes = self.extract_inline_attributes(heading_text)
-                    
                     # Merge attributes
+                    attributes = style_attributes.copy()
                     if inline_attributes:
                         for key, value in inline_attributes.items():
                             if key in attributes and key == 'style':

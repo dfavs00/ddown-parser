@@ -12,11 +12,11 @@ class BaseParser:
         """Initialize a new base parser."""
         # Compile regex patterns for different Ddown elements
         self.heading_patterns: Dict[str, Pattern] = {
-            'h1': re.compile(r'^(.+)\n(={3,})\s*$', re.MULTILINE),
-            'h2': re.compile(r'^(.+)\n(-{3,})\s*$', re.MULTILINE),
-            'h3': re.compile(r'^(.+)\n(~{3,})\s*$', re.MULTILINE),
-            'h4': re.compile(r'^(.+)\n(\^{3,})\s*$', re.MULTILINE),
-            'h5': re.compile(r'^(.+)\n(\*{3,})\s*$', re.MULTILINE),
+            'h1': re.compile(r'^(.+?)\n(={3,})\s*$', re.MULTILINE),
+            'h2': re.compile(r'^(.+?)\n(-{3,})\s*$', re.MULTILINE),
+            'h3': re.compile(r'^(.+?)\n(~{3,})\s*$', re.MULTILINE),
+            'h4': re.compile(r'^(.+?)\n(\^{3,})\s*$', re.MULTILINE),
+            'h5': re.compile(r'^(.+?)\n(\*{3,})\s*$', re.MULTILINE),
         }
         self.list_patterns: Dict[str, Pattern] = {
             'unordered': re.compile(r'^=>\s+(.+)$', re.MULTILINE),
@@ -107,10 +107,14 @@ class BaseParser:
             Tuple of (cleaned text, extracted attributes)
         """
         attributes = {}
+        cleaned_text = text
         
-        # Extract inline style
-        inline_style_match = self.style_patterns['inline'].search(text)
-        if inline_style_match:
+        # Process all inline styles
+        while True:
+            inline_style_match = self.style_patterns['inline'].search(cleaned_text)
+            if not inline_style_match:
+                break
+                
             style_content = inline_style_match.group(1).strip()
             style_dict = {}
             
@@ -128,14 +132,19 @@ class BaseParser:
                     continue
             
             if style_dict:
-                attributes['style'] = style_dict
+                if 'style' not in attributes:
+                    attributes['style'] = {}
+                attributes['style'].update(style_dict)
             
             # Remove the style from the text
-            text = text.replace(inline_style_match.group(0), '')
+            cleaned_text = cleaned_text.replace(inline_style_match.group(0), '')
         
-        # Extract class/ID
-        class_id_match = self.style_patterns['class_id'].search(text)
-        if class_id_match:
+        # Process all class/ID attributes
+        while True:
+            class_id_match = self.style_patterns['class_id'].search(cleaned_text)
+            if not class_id_match:
+                break
+                
             class_id_content = class_id_match.group(1).strip()
             classes = []
             element_id = None
@@ -148,11 +157,13 @@ class BaseParser:
                     element_id = selector[1:]
             
             if classes:
-                attributes['classes'] = classes
+                if 'classes' not in attributes:
+                    attributes['classes'] = []
+                attributes['classes'].extend(classes)
             if element_id:
-                attributes['id'] = element_id
+                attributes['id'] = element_id  # Last ID wins if multiple
             
             # Remove the class/ID from the text
-            text = text.replace(class_id_match.group(0), '')
+            cleaned_text = cleaned_text.replace(class_id_match.group(0), '')
         
-        return text.strip(), attributes
+        return cleaned_text.strip(), attributes
