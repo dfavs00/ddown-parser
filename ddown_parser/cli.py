@@ -41,6 +41,12 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
     )
     
     parser.add_argument(
+        "--css",
+        type=str,
+        help="Path to a custom CSS file to use for styling the output"
+    )
+    
+    parser.add_argument(
         "--version",
         action="version",
         version="%(prog)s 0.1.0"
@@ -76,6 +82,22 @@ def main(args: Optional[List[str]] = None) -> int:
         # Parse command line arguments
         parsed_args = parse_arguments(args)
         
+        # Check if input file exists
+        input_path = Path(parsed_args.input_file)
+        if not input_path.exists():
+            print(f"Error: Input file '{input_path}' does not exist.", file=sys.stderr)
+            return 1
+        
+        # Check if custom CSS file exists if specified
+        custom_css = None
+        if parsed_args.css:
+            css_path = Path(parsed_args.css)
+            if not css_path.exists():
+                print(f"Error: CSS file '{css_path}' does not exist.", file=sys.stderr)
+                return 1
+            with open(css_path, 'r', encoding='utf-8') as f:
+                custom_css = f.read()
+        
         # Create parser instance
         parser = DdownParser()
         
@@ -86,16 +108,30 @@ def main(args: Optional[List[str]] = None) -> int:
         else:
             output_path = Path(output_path)
         
-        # Parse the input file
-        result = parser.parse_file(parsed_args.input_file, output_format=parsed_args.format)
+        # Create output directory if it doesn't exist
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Write the result to the output file
-        mode = "wb" if isinstance(result, bytes) else "w"
-        with open(output_path, mode) as f:
-            f.write(result)
-        
-        print(f"Successfully converted {parsed_args.input_file} to {output_path}")
-        return 0
+        try:
+            # Parse the input file
+            result = parser.parse_file(parsed_args.input_file, output_format=parsed_args.format, custom_css=custom_css)
+            
+            # Write the result to the output file
+            mode = "wb" if isinstance(result, bytes) else "w"
+            with open(output_path, mode) as f:
+                f.write(result)
+            
+            print(f"Successfully converted {parsed_args.input_file} to {output_path}")
+            return 0
+            
+        except ImportError as e:
+            if parsed_args.format == "pdf":
+                print(f"Error: {e}", file=sys.stderr)
+                print("To generate PDFs, you need to install one of the following:", file=sys.stderr)
+                print("  pip install weasyprint", file=sys.stderr)
+                print("  or", file=sys.stderr)
+                print("  pip install pdfkit", file=sys.stderr)
+                return 1
+            raise
     
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)

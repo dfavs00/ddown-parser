@@ -5,8 +5,9 @@ markdown>=3.4.0
 # HTML output
 beautifulsoup4>=4.11.0
 
-# PDF output
-weasyprint>=57.0
+# PDF output (alternatives - only one is required)
+weasyprint>=57.0; sys_platform != "win32" # Recommended for Linux/macOS
+pdfkit>=1.0.0 # Recommended for Windows (requires wkhtmltopdf installation)
 
 # Testing
 pytest>=7.0.0

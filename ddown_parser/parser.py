@@ -20,12 +20,13 @@ class DdownParser:
         self._pdf_converter = PdfConverter()
         self.output_formats = self._parser.output_formats
     
-    def parse_file(self, file_path: Union[str, Path], output_format: str = 'html') -> Union[str, bytes]:
+    def parse_file(self, file_path: Union[str, Path], output_format: str = 'html', custom_css: Optional[str] = None) -> Union[str, bytes]:
         """Parse a Ddown file and convert it to the specified output format.
         
         Args:
             file_path: Path to the Ddown file to parse
             output_format: Output format (html, pdf, etc.)
+            custom_css: Optional custom CSS to apply to the output
             
         Returns:
             Parsed content in the requested format (string for HTML, bytes for PDF)
@@ -49,11 +50,18 @@ class DdownParser:
         # Parse the content
         document = self._parse_content(content)
         
+        # Add custom CSS if provided
+        if custom_css:
+            if 'global_styles' not in document:
+                document['global_styles'] = custom_css
+            else:
+                document['global_styles'] += "\n" + custom_css
+        
         # Convert to the requested output format
         if output_format == 'html':
-            return self._html_converter.convert(document)
+            return self._convert_to_html(document, custom_css)
         elif output_format == 'pdf':
-            return self._pdf_converter.convert(document)
+            return self._convert_to_pdf(document, custom_css)
         
         # This should never happen due to the validation above
         raise ValueError(f"Unsupported output format: {output_format}")
@@ -69,24 +77,36 @@ class DdownParser:
         """
         return self._parser._parse_content(content)
     
-    def _convert_to_html(self, document: Dict[str, Any]) -> str:
+    def _convert_to_html(self, document: Dict[str, Any], custom_css: Optional[str] = None) -> str:
         """Convert a parsed document to HTML.
         
         Args:
             document: Parsed document structure
+            custom_css: Optional custom CSS to apply to the output
             
         Returns:
             HTML string
         """
+        if custom_css and 'global_styles' not in document:
+            document['global_styles'] = custom_css
+        elif custom_css:
+            document['global_styles'] += "\n" + custom_css
+            
         return self._html_converter.convert(document)
     
-    def _convert_to_pdf(self, document: Dict[str, Any]) -> bytes:
+    def _convert_to_pdf(self, document: Dict[str, Any], custom_css: Optional[str] = None) -> bytes:
         """Convert a parsed document to PDF.
         
         Args:
             document: Parsed document structure
+            custom_css: Optional custom CSS to apply to the output
             
         Returns:
             PDF bytes
         """
+        if custom_css and 'global_styles' not in document:
+            document['global_styles'] = custom_css
+        elif custom_css:
+            document['global_styles'] += "\n" + custom_css
+            
         return self._pdf_converter.convert(document)
