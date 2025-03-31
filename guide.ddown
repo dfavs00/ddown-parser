@@ -1,14 +1,9 @@
+{@dom-mode}
+
 Ddown Syntax Guide
 ==================
 
 Welcome to the Ddown Syntax Guide! This document explains how to use the .ddown file type, a markdown variant created by Dom. Below, you'll find the rules and features that make Ddown unique, including headings, lists, styling, and more.
-
-{@global-style}
-h1 { color: #2E86C1; font-family: Arial; }
-h2 { color: #3498DB; }
-li { margin-bottom: 8px; }
-.special-list { color: #E74C3C; }
-{@endglobal-style}
 
 Headings in Ddown
 -----------------
