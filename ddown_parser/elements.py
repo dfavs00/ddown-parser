@@ -181,11 +181,31 @@ class ImageElement(DdownElement):
             Dictionary representation of the image element
         """
         result = super().to_dict()
-        result.update({
-            'alt': self.alt,
-            'src': self.src
-        })
+        result['alt'] = self.alt
+        result['src'] = self.src
         return result
+    
+    def to_html(self) -> str:
+        """Convert the image element to HTML.
+        
+        Returns:
+            HTML representation of the image element
+        """
+        attributes_str = ''
+        if self.attributes:
+            for key, value in self.attributes.items():
+                if key == 'style':
+                    style_str = '; '.join([f"{k}: {v}" for k, v in value.items()])
+                    attributes_str += f" style=\"{style_str}\""
+                elif key == 'classes':
+                    class_str = ' '.join(value)
+                    attributes_str += f" class=\"{class_str}\""
+                elif key == 'id':
+                    attributes_str += f" id=\"{value}\""
+                else:
+                    attributes_str += f" {key}=\"{value}\""
+        
+        return f"<img src=\"{self.src}\" alt=\"{self.alt}\"{attributes_str}>"
 
 
 class LinkElement(DdownElement):
@@ -211,6 +231,28 @@ class LinkElement(DdownElement):
         result = super().to_dict()
         result['href'] = self.href
         return result
+    
+    def to_html(self) -> str:
+        """Convert the link element to HTML.
+        
+        Returns:
+            HTML representation of the link element
+        """
+        attributes_str = ''
+        if self.attributes:
+            for key, value in self.attributes.items():
+                if key == 'style':
+                    style_str = '; '.join([f"{k}: {v}" for k, v in value.items()])
+                    attributes_str += f" style=\"{style_str}\""
+                elif key == 'classes':
+                    class_str = ' '.join(value)
+                    attributes_str += f" class=\"{class_str}\""
+                elif key == 'id':
+                    attributes_str += f" id=\"{value}\""
+                else:
+                    attributes_str += f" {key}=\"{value}\""
+        
+        return f"<a href=\"{self.href}\"{attributes_str}>{self.content}</a>"
 
 
 class TableElement(DdownElement):
