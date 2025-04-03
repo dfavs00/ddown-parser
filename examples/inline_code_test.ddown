@@ -1,0 +1,54 @@
+{@dom-mode}
+
+Inline Code Example
+=================
+
+This document demonstrates the new inline code formatting with backticks.
+
+Basic Usage
+----------
+
+=> Use single backticks like `this` to create inline code
+=> The code will be styled with a special background and color
+=> Perfect for referencing variable names, commands, or short code snippets
+
+Examples
+~~~~~~~
+
+Here are some examples of inline code formatting:
+
+1. Variable names: `user_name`, `count`, `is_active`
+2. Function calls: `print("Hello World")`, `calculate_total(items)`
+3. HTML tags: `<div>`, `<span>`, `<a href="#">`
+4. File paths: `/usr/local/bin`, `C:\Program Files\`
+5. Commands: `npm install`, `git commit -m "message"`
+
+Inline Code in Lists
+~~~~~~~~~~~~~~~~~~
+
+=> The `map()` function transforms each element in an array
+=> Use `filter()` to remove unwanted elements
+=> The `reduce()` function combines all elements into a single value
+
+Inline Code with Styling
+~~~~~~~~~~~~~~~~~~~~~~
+
+You can combine inline code with other Ddown features:
+
+=> Inline code in a heading: `code` in headings
+=> Inline code with links: [`linked code`](https://example.com)
+=> Inline code with inline styles: `styled code` {@ font-weight: bold; }
+
+Code Blocks vs Inline Code
+~~~~~~~~~~~~~~~~~~~~~~~
+
+For longer code snippets, use code blocks with triple backticks:
+
+```python
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Ddown User"))
+```
+
+But for short snippets within text, use `inline code` with single backticks.
