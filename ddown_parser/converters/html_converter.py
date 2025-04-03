@@ -97,6 +97,8 @@ class HtmlConverter(BaseConverter):
             padding: 0.2em 0.4em;
             border-radius: 3px;
             color: #ffb300; /* Yellow accent */
+            display: inline-block;
+            margin: 0 0.2em;
         }
         
         pre {

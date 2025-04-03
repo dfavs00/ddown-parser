@@ -7,6 +7,7 @@ from ..elements import (
     ListItemElement,
     ListElement,
     CodeBlockElement,
+    InlineCodeElement,
     BlockquoteElement,
     ImageElement,
     LinkElement,
@@ -99,7 +100,7 @@ class ElementParser(BaseParser):
                     continue
     
     def process_inline_elements(self, text: str) -> List[Dict[str, Any]]:
-        """Process inline elements like links and images in text.
+        """Process inline elements like links, images, and inline code in text.
         
         Args:
             text: Text to process
@@ -111,7 +112,7 @@ class ElementParser(BaseParser):
         
         # Process links
         for link_match in self.link_pattern.finditer(text):
-            if text[link_match.start()-1:link_match.start()] == '!':
+            if link_match.start() > 0 and text[link_match.start()-1:link_match.start()] == '!':
                 # This is an image, will be handled by the image pattern
                 continue
                 
@@ -147,6 +148,22 @@ class ElementParser(BaseParser):
                 'start': image_match.start(),
                 'end': image_match.end(),
                 'original': image_match.group(0)
+            })
+            
+        # Process inline code
+        for code_match in self.inline_code_pattern.finditer(text):
+            code_content = code_match.group(1)
+            
+            code_element = InlineCodeElement(
+                content=code_content
+            )
+            
+            inline_elements.append({
+                'type': 'inline_code',
+                'element': code_element.to_dict(),
+                'start': code_match.start(),
+                'end': code_match.end(),
+                'original': code_match.group(0)
             })
         
         # Sort by position in text
@@ -574,7 +591,7 @@ class ElementParser(BaseParser):
                 # End of paragraph
                 paragraph_text = ' '.join(paragraph_lines)
                 
-                # Process links and images
+                # Process inline elements (links, images, inline code)
                 inline_elements = self.process_inline_elements(paragraph_text)
                 for element in inline_elements:
                     if element['type'] == 'link':
@@ -589,6 +606,11 @@ class ElementParser(BaseParser):
                             src=element['element']['src']
                         )
                         paragraph_text = paragraph_text.replace(element['original'], image_element.to_html())
+                    elif element['type'] == 'inline_code':
+                        code_element = InlineCodeElement(
+                            content=element['element']['content']
+                        )
+                        paragraph_text = paragraph_text.replace(element['original'], code_element.to_html())
                 
                 # Create the paragraph element
                 paragraph = ParagraphElement(content=paragraph_text)
@@ -604,7 +626,7 @@ class ElementParser(BaseParser):
         if in_paragraph and paragraph_lines:
             paragraph_text = ' '.join(paragraph_lines)
             
-            # Process links and images
+            # Process inline elements (links, images, inline code)
             inline_elements = self.process_inline_elements(paragraph_text)
             for element in inline_elements:
                 if element['type'] == 'link':
@@ -619,6 +641,11 @@ class ElementParser(BaseParser):
                         src=element['element']['src']
                     )
                     paragraph_text = paragraph_text.replace(element['original'], image_element.to_html())
+                elif element['type'] == 'inline_code':
+                    code_element = InlineCodeElement(
+                        content=element['element']['content']
+                    )
+                    paragraph_text = paragraph_text.replace(element['original'], code_element.to_html())
             
             # Create the paragraph element
             paragraph = ParagraphElement(content=paragraph_text)

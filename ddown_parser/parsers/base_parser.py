@@ -29,6 +29,7 @@ class BaseParser:
             'dom_mode': re.compile(r'\{@dom-mode\}'),  # New pattern for dom-mode
         }
         self.code_block_pattern: Pattern = re.compile(r'```([^\n]*)\n([\s\S]*?)```', re.MULTILINE)
+        self.inline_code_pattern: Pattern = re.compile(r'`([^`]+)`')  # New pattern for inline code
         self.blockquote_pattern: Pattern = re.compile(r'^>\s*(.+)$', re.MULTILINE)
         self.table_pattern: Pattern = re.compile(r'^\|(.+)\|\s*$', re.MULTILINE)
         self.table_separator_pattern: Pattern = re.compile(r'^\|[-:\s|]+\|\s*$', re.MULTILINE)
